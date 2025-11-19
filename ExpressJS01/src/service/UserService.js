@@ -43,6 +43,7 @@ export const loginUser = async (email, password) => {
         const payload = {
             email: user.email,
             name: user.name,
+            role: user.role,
         }
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -53,6 +54,7 @@ export const loginUser = async (email, password) => {
             user: {
                 email: user.email,
                 name: user.name,
+                role: user.role,
             }
         }
     } catch (e) {

@@ -5,10 +5,21 @@ import { getHomePage } from './controller/homeController.js';
 import connectDB from './config/database.js';
 import cors from 'cors'
 import dotenv from 'dotenv';
+import rateLimit from 'express-rate-limit';
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
-app.use(cors());
+
+const limiter = rateLimit({
+    max: 100,
+    windowMs: 60 * 1000,
+    message: "Too many request from this IP"
+});
+app.use(limiter);
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 viewEngine(app);

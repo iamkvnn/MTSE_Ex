@@ -4,8 +4,11 @@ import jwt from 'jsonwebtoken';
 config();
 
 export const auth = (req, res, next) => {
-    const whitelist = ['', 'login', 'register'];
-    if (whitelist.find(item => `/api/v1/${item}` === req.originalUrl)) {
+    const whitelist = ['login', 'register', 'products', 'products/categories'];
+    
+    const isWhitelisted = whitelist.find(item => req.originalUrl.startsWith(`/api/v1/${item}`));
+    
+    if (isWhitelisted) {
         return next();
     }
 
@@ -21,4 +24,22 @@ export const auth = (req, res, next) => {
     } catch (err) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
+}
+
+export const isAdmin = (req, res, next) => {
+    if (!req.user) {
+        return res.status(401).json({ 
+            EC: 1,
+            EM: 'Unauthorized - No user found' 
+        });
+    }
+    
+    if (req.user.role !== 'Admin') {
+        return res.status(403).json({ 
+            EC: 1,
+            EM: 'Forbidden - Admin access required' 
+        });
+    }
+    
+    next();
 }

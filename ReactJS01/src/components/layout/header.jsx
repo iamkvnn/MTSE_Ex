@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { HomeOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { HomeOutlined, SettingOutlined, UserOutlined, ShoppingOutlined, DashboardOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/auth.context';
@@ -14,11 +14,23 @@ const Header = () => {
             key: 'home',
             icon: <HomeOutlined />,
         },
-        ...(auth.isAuthenticated ? [
+        {
+            label: <Link to="/products">Products</Link>,
+            key: 'products',
+            icon: <ShoppingOutlined />,
+        },
+        ...(auth.isAuthenticated && auth.user.role === 'Admin' ? [
             {
                 label: <Link to="/user">User</Link>,
                 key: 'user',
                 icon: <UserOutlined />,
+            }
+        ] : []),
+        ...(auth.isAuthenticated && auth.user.role === 'Admin' ? [
+            {
+                label: <Link to="/admin">Admin Dashboard</Link>,
+                key: 'admin',
+                icon: <DashboardOutlined />,
             }
         ] : []),
         {
@@ -31,7 +43,7 @@ const Header = () => {
                         label: <span onClick={() => {
                             localStorage.clear('access_token');
                             setCurrent('home');
-                            setAuth({ isAuthenticated: false, user: { email: '', name: '' } });
+                            setAuth({ isAuthenticated: false, user: { email: '', name: '', role: '' } });
                             navigate('/');
                         }}>Đăng xuất</span>,
                         key: 'logout',
