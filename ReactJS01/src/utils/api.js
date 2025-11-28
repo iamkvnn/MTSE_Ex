@@ -34,6 +34,48 @@ const getProductsAPI = async (page = 1, limit = 10, category = 'all', search = '
     return await axios.get(`/api/v1/products?${params.toString()}`);
 };
 
+// Tìm kiếm sản phẩm với Elasticsearch
+const searchProductsAPI = async ({
+    query = '',
+    category = 'all',
+    minPrice,
+    maxPrice,
+    page = 1,
+    limit = 10
+}) => {
+    const params = new URLSearchParams({
+        page: page.toString(),
+        limit: limit.toString()
+    });
+    
+    if (query) {
+        params.append('search', query);
+    }
+    
+    if (category && category !== 'all') {
+        params.append('category', category);
+    }
+    
+    if (minPrice !== undefined && minPrice !== '') {
+        params.append('minPrice', minPrice.toString());
+    }
+    
+    if (maxPrice !== undefined && maxPrice !== '') {
+        params.append('maxPrice', maxPrice.toString());
+    }
+    
+    return await axios.get(`/api/v1/products/search?${params.toString()}`);
+};
+
+const getSuggestionsAPI = async (query, limit = 5) => {
+    const params = new URLSearchParams({
+        search: query,
+        limit: limit.toString()
+    });
+    
+    return await axios.get(`/api/v1/products/suggestions?${params.toString()}`);
+};
+
 const getProductByIdAPI = async (id) => {
     return await axios.get(`/api/v1/products/${id}`);
 };
@@ -59,6 +101,8 @@ export {
     logiApi,
     getUserApi,
     getProductsAPI,
+    searchProductsAPI,
+    getSuggestionsAPI,
     getProductByIdAPI,
     getCategoriesAPI,
     createProductAPI,

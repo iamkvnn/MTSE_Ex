@@ -6,6 +6,7 @@ import connectDB from './config/database.js';
 import cors from 'cors'
 import dotenv from 'dotenv';
 import rateLimit from 'express-rate-limit';
+import { initElasticsearch } from './config/elasticsearch.js';
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -13,7 +14,7 @@ const PORT = process.env.PORT || 8080;
 const limiter = rateLimit({
     max: 100,
     windowMs: 60 * 1000,
-    message: "Too many request from this IP"
+    message: "Too many request"
 });
 app.use(limiter);
 app.use(cors({
@@ -31,6 +32,14 @@ app.use('/api/v1', routerAPI);
 (async () => {
     try {
         await connectDB();
+
+        const esAvailable = await initElasticsearch();
+        if (esAvailable) {
+            console.log('Elasticsearch initialized successfully');
+        } else {
+            console.log('Elasticsearch not available, using MongoDB for search');
+        }
+        
         app.listen(PORT, () => {
             console.log(`Backend Node.js is running on port: ${PORT}`);
         });
@@ -38,4 +47,3 @@ app.use('/api/v1', routerAPI);
         console.error('Failed to connect to the database:', error);
     }
 })();
-connectDB();

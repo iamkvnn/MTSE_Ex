@@ -1,15 +1,15 @@
 import { Product } from '../model/product.js';
+import {
+    indexProduct,
+    updateProductInES,
+} from './elasticsearchService.js';
 
 export const getProductsService = async ({ page = 1, limit = 10, category, search }) => {
     try {
         const query = { isActive: true };
-        
-        // Filter by category
         if (category && category !== 'all') {
             query.category = category;
         }
-        
-        // Search by name or description
         if (search) {
             query.$or = [
                 { name: { $regex: search, $options: 'i' } },
@@ -77,6 +77,8 @@ export const getProductByIdService = async (id) => {
 export const createProductService = async (data) => {
     try {
         const product = await Product.create(data);
+
+        await indexProduct(product);
         
         return {
             EC: 0,
@@ -106,6 +108,16 @@ export const updateProductService = async (id, data) => {
                 EM: 'Product not found'
             };
         }
+        await updateProductInES(id, {
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            category: product.category,
+            image: product.image,
+            stock: product.stock,
+            isActive: product.isActive,
+            updatedAt: product.updatedAt
+        });
         
         return {
             EC: 0,
@@ -135,6 +147,8 @@ export const deleteProductService = async (id) => {
                 EM: 'Product not found'
             };
         }
+        
+        await updateProductInES(id, { isActive: false });
         
         return {
             EC: 0,

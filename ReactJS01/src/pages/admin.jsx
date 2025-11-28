@@ -31,14 +31,12 @@ const AdminPage = () => {
         isActive: true
     });
 
-    // Check if user is admin
     useEffect(() => {
         if (!auth.isAuthenticated || auth.user.role !== 'Admin') {
             navigate('/login');
         }
     }, [auth, navigate]);
 
-    // Fetch categories
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -54,7 +52,6 @@ const AdminPage = () => {
         fetchCategories();
     }, []);
 
-    // Fetch products
     useEffect(() => {
         fetchProducts();
     }, [page, selectedCategory, searchTerm]);
@@ -211,11 +208,9 @@ const AdminPage = () => {
                 <p>Manage your products</p>
             </div>
 
-            {/* Messages */}
             {error && <div className="message error-message">{error}</div>}
             {success && <div className="message success-message">{success}</div>}
 
-            {/* Controls */}
             <div className="admin-controls">
                 <div className="search-section">
                     <input
@@ -253,7 +248,6 @@ const AdminPage = () => {
                 </button>
             </div>
 
-            {/* Products Table */}
             <div className="products-table-container">
                 {loading ? (
                     <div className="loading-indicator">
@@ -325,7 +319,6 @@ const AdminPage = () => {
                 )}
             </div>
 
-            {/* Pagination */}
             {pagination.totalPages > 1 && (
                 <div className="pagination">
                     <button 
@@ -348,7 +341,6 @@ const AdminPage = () => {
                 </div>
             )}
 
-            {/* Modal */}
             {showModal && (
                 <div className="modal-overlay" onClick={handleCloseModal}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>

@@ -10,7 +10,9 @@ import {
     createProduct,
     updateProduct,
     deleteProduct,
-    getCategories
+    getCategories,
+    searchProducts,
+    getSuggestions
 } from '../controller/productController.js';
 
 const routerAPI = express.Router();
@@ -28,6 +30,8 @@ routerAPI.get('/user', isAdmin, getUser);
 routerAPI.get('/account', getAccount);
 routerAPI.get('/products', getProducts);
 routerAPI.get('/products/categories', getCategories);
+routerAPI.get('/products/search', searchProducts);
+routerAPI.get('/products/suggestions', getSuggestions);
 routerAPI.get('/products/:id', getProductById);
 routerAPI.post('/admin/products', isAdmin, createProduct);
 routerAPI.put('/admin/products/:id', isAdmin, updateProduct);
