@@ -1,8 +1,16 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback, useContext } from 'react';
+import { useMutation } from '@apollo/client/react';
 import { searchProductsAPI, getSuggestionsAPI, getCategoriesAPI } from '../utils/api';
+import { ADD_TO_CART } from '../graphql/cartQueries';
+import { AuthContext } from '../components/context/auth.context';
+import { message } from 'antd';
 import '../styles/products.css';
 
 const ProductsPage = () => {
+    const { auth } = useContext(AuthContext);
+    const [messageApi, contextHolder] = message.useMessage();
+    const [addToCart, { loading: addingToCart }] = useMutation(ADD_TO_CART);
+
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('all');
@@ -199,6 +207,23 @@ const ProductsPage = () => {
         return product.description;
     };
 
+    // Thêm sản phẩm vào giỏ hàng
+    const handleAddToCart = async (productId) => {
+        if (!auth.isAuthenticated) {
+            messageApi.warning('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
+            return;
+        }
+
+        try {
+            await addToCart({
+                variables: { productId, quantity: 1 }
+            });
+            messageApi.success('Đã thêm sản phẩm vào giỏ hàng');
+        } catch (err) {
+            messageApi.error(err.message || 'Lỗi thêm vào giỏ hàng');
+        }
+    };
+
     const renderProductCard = (product, isLast) => (
         <div
             ref={isLast ? lastProductRef : null}
@@ -223,6 +248,7 @@ const ProductsPage = () => {
                 <button 
                     className="add-to-cart-btn"
                     disabled={product.stock === 0}
+                    onClick={() => handleAddToCart(product._id)}
                 >
                     {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
                 </button>
@@ -232,6 +258,7 @@ const ProductsPage = () => {
 
     return (
         <div className="products-page">
+            {contextHolder}
             <div className="products-header">
                 <h1>Our Products</h1>
                 <p>Discover our wide range of quality products</p>

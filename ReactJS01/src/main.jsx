@@ -9,7 +9,10 @@ import RegisterPage from './pages/register.jsx'
 import LoginPage from './pages/login.jsx'
 import ProductsPage from './pages/products.jsx'
 import AdminPage from './pages/admin.jsx'
+import CartPage from './pages/cart.jsx'
 import { AuthWrapper } from './components/context/auth.context.jsx'
+import { ApolloProvider } from '@apollo/client/react'
+import { apolloClient } from './utils/apolloClient.js'
 
 
 const router = createBrowserRouter([
@@ -33,6 +36,10 @@ const router = createBrowserRouter([
         path: "admin",
         element: <AdminPage />,
       },
+      {
+        path: "cart",
+        element: <CartPage />,
+      },
     ],
   },
   {
@@ -47,8 +54,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthWrapper>
-      <RouterProvider router={router} />
-    </AuthWrapper>
+    <ApolloProvider client={apolloClient}>
+      <AuthWrapper>
+        <RouterProvider router={router} />
+      </AuthWrapper>
+    </ApolloProvider>
   </StrictMode>,
 )

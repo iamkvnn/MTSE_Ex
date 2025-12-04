@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { HomeOutlined, SettingOutlined, UserOutlined, ShoppingOutlined, DashboardOutlined } from '@ant-design/icons';
+import { HomeOutlined, SettingOutlined, UserOutlined, ShoppingOutlined, DashboardOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/auth.context';
@@ -19,6 +19,13 @@ const Header = () => {
             key: 'products',
             icon: <ShoppingOutlined />,
         },
+        ...(auth.isAuthenticated ? [
+            {
+                label: <Link to="/cart">Cart</Link>,
+                key: 'cart',
+                icon: <ShoppingCartOutlined />,
+            }
+        ] : []),
         ...(auth.isAuthenticated && auth.user.role === 'Admin' ? [
             {
                 label: <Link to="/user">User</Link>,

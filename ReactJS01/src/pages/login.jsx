@@ -24,6 +24,7 @@ const LoginPage = () => {
             setAuth({
                 isAuthenticated: true,
                 user: {
+                    _id: res?.user?._id ?? '',
                     email: res?.user?.email ?? '',
                     name: res?.user?.name ?? '',
                     role: res?.user?.role ?? 'User',
