@@ -1,7 +1,7 @@
 import express from 'express';
 import { createUser, getUser } from '../controller/userController.js';
 import { getAccount, handleLogin } from '../controller/userController.js';
-import { auth, isAdmin } from '../middleware/auth.js';
+import { isAdmin } from '../middleware/auth.js';
 import { validateLogin } from '../middleware/login-validator.js';
 import { validateUser } from '../middleware/user-validator.js';
 import {
@@ -16,8 +16,6 @@ import {
 } from '../controller/productController.js';
 
 const routerAPI = express.Router();
-
-routerAPI.use(auth);
 
 routerAPI.get('/', (req, res) => {
     return res.status(200).json({ message: 'Hello world API' });

@@ -7,6 +7,8 @@ import cors from 'cors'
 import dotenv from 'dotenv';
 import rateLimit from 'express-rate-limit';
 import { initElasticsearch } from './config/elasticsearch.js';
+import { setupGraphQL } from './graphql/index.js';
+import { auth } from './middleware/auth.js';
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -26,6 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 viewEngine(app);
 const webAPI = express.Router();
 webAPI.get('/', getHomePage);
+app.use(auth);
 app.use('/', webAPI);
 app.use('/api/v1', routerAPI);
 
@@ -39,6 +42,7 @@ app.use('/api/v1', routerAPI);
         } else {
             console.log('Elasticsearch not available, using MongoDB for search');
         }
+        await setupGraphQL(app);
         
         app.listen(PORT, () => {
             console.log(`Backend Node.js is running on port: ${PORT}`);

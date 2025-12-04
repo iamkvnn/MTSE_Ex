@@ -41,6 +41,7 @@ export const loginUser = async (email, password) => {
             }
         }
         const payload = {
+            _id: user._id,
             email: user.email,
             name: user.name,
             role: user.role,
@@ -52,6 +53,7 @@ export const loginUser = async (email, password) => {
             EC: 0,
             token,
             user: {
+                _id: user._id,
                 email: user.email,
                 name: user.name,
                 role: user.role,
