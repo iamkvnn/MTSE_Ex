@@ -5,6 +5,7 @@ import {
     updateProductService,
     deleteProductService,
     getCategoriesService,
+    getSimilarProductsService,
 } from '../service/ProductService.js';
 
 import {
@@ -98,8 +99,9 @@ export const getSuggestions = async (req, res) => {
 export const getProductById = async (req, res) => {
     try {
         const { id } = req.params;
+        const userId = req.user?._id || null;
         
-        const result = await getProductByIdService(id);
+        const result = await getProductByIdService(id, userId);
         
         if (result.EC === 1) {
             return res.status(404).json(result);
@@ -108,6 +110,23 @@ export const getProductById = async (req, res) => {
         return res.status(200).json(result);
     } catch (error) {
         console.error('Error in getProductById:', error);
+        return res.status(500).json({
+            EC: 1,
+            EM: 'Internal server error'
+        });
+    }
+};
+
+export const getSimilarProducts = async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const { limit = 8 } = req.query;
+        
+        const result = await getSimilarProductsService(productId, parseInt(limit));
+        
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error('Error in getSimilarProducts:', error);
         return res.status(500).json({
             EC: 1,
             EM: 'Internal server error'

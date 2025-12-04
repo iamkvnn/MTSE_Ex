@@ -1,0 +1,256 @@
+.orders-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.orders-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+}
+
+.orders-header {
+    margin-bottom: 24px;
+}
+
+.orders-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.order-card {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.order-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: #fafafa;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.order-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.order-id {
+    font-weight: 600;
+    color: #333;
+}
+
+.order-date {
+    font-size: 13px;
+    color: #999;
+}
+
+.order-items-preview {
+    padding: 16px;
+}
+
+.order-item-preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.order-item-preview:last-child {
+    border-bottom: none;
+}
+
+.order-item-preview img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.order-item-preview .item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.order-item-preview .item-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.order-item-preview .item-qty {
+    font-size: 13px;
+    color: #999;
+}
+
+.order-item-preview .item-price {
+    font-weight: 500;
+    color: #f5222d;
+}
+
+.more-items {
+    text-align: center;
+    color: #1890ff;
+    padding: 8px 0;
+    font-size: 14px;
+}
+
+.order-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: #fafafa;
+    border-top: 1px solid #f0f0f0;
+}
+
+.order-total {
+    font-size: 16px;
+    color: #333;
+}
+
+.order-total strong {
+    color: #f5222d;
+    font-size: 18px;
+}
+
+.order-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.orders-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+/* Order Detail Modal */
+.modal-loading {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+.order-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.order-status-timeline {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.cancelled-notice {
+    text-align: center;
+}
+
+.cancel-reason {
+    color: #999;
+    margin-top: 8px;
+}
+
+.order-detail-section h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.order-detail-section p {
+    margin: 4px 0;
+    color: #555;
+}
+
+.order-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #fafafa;
+    border-radius: 8px;
+}
+
+.order-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.order-item .item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.order-item .item-details a {
+    color: #333;
+    font-weight: 500;
+}
+
+.order-item .item-details a:hover {
+    color: #1890ff;
+}
+
+.order-item .item-details span {
+    font-size: 13px;
+    color: #999;
+}
+
+.order-item .item-total {
+    font-weight: 600;
+    color: #f5222d;
+    font-size: 16px;
+}
+
+.order-detail-summary {
+    border-top: 1px solid #f0f0f0;
+    padding-top: 16px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+}
+
+.summary-row.total {
+    font-size: 18px;
+    font-weight: 600;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 12px;
+    margin-top: 8px;
+}
+
+.summary-row.total span:last-child {
+    color: #f5222d;
+}

@@ -1,15 +1,15 @@
 import { useEffect, useState, useRef, useCallback, useContext } from 'react';
-import { useMutation } from '@apollo/client/react';
+import { useNavigate } from 'react-router-dom';
 import { searchProductsAPI, getSuggestionsAPI, getCategoriesAPI } from '../utils/api';
-import { ADD_TO_CART } from '../graphql/cartQueries';
 import { AuthContext } from '../components/context/auth.context';
 import { message } from 'antd';
 import '../styles/products.css';
 
 const ProductsPage = () => {
     const { auth } = useContext(AuthContext);
+    const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
-    const [addToCart, { loading: addingToCart }] = useMutation(ADD_TO_CART);
+    const [addingToCart, setAddingToCart] = useState({});
 
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -211,16 +211,22 @@ const ProductsPage = () => {
     const handleAddToCart = async (productId) => {
         if (!auth.isAuthenticated) {
             messageApi.warning('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
+            navigate('/login');
             return;
         }
 
+        setAddingToCart(prev => ({ ...prev, [productId]: true }));
         try {
-            await addToCart({
-                variables: { productId, quantity: 1 }
-            });
-            messageApi.success('Đã thêm sản phẩm vào giỏ hàng');
+            const response = await addToCartAPI(productId, 1);
+            if (response.EC === 0) {
+                messageApi.success('Đã thêm sản phẩm vào giỏ hàng');
+            } else {
+                messageApi.error(response.EM || 'Lỗi thêm vào giỏ hàng');
+            }
         } catch (err) {
             messageApi.error(err.message || 'Lỗi thêm vào giỏ hàng');
+        } finally {
+            setAddingToCart(prev => ({ ...prev, [productId]: false }));
         }
     };
 
@@ -230,14 +236,16 @@ const ProductsPage = () => {
             key={product._id}
             className="product-card"
         >
-            <div className="product-image">
+            <div className="product-image" onClick={() => navigate(`/products/${product._id}`)}>
                 <img src={product.image} alt={product.name} />
                 <span className="product-category">
                     {getCategoryLabel(product.category)}
                 </span>
             </div>
             <div className="product-info">
-                <h3 className="product-name">{renderHighlightedName(product)}</h3>
+                <h3 className="product-name" onClick={() => navigate(`/products/${product._id}`)}>
+                    {renderHighlightedName(product)}
+                </h3>
                 <p className="product-description">{renderHighlightedDescription(product)}</p>
                 <div className="product-footer">
                     <span className="product-price">{formatPrice(product.price)}</span>
@@ -247,10 +255,10 @@ const ProductsPage = () => {
                 </div>
                 <button 
                     className="add-to-cart-btn"
-                    disabled={product.stock === 0}
+                    disabled={product.stock === 0 || addingToCart[product._id]}
                     onClick={() => handleAddToCart(product._id)}
                 >
-                    {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
+                    {addingToCart[product._id] ? 'Adding...' : product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
                 </button>
             </div>
         </div>

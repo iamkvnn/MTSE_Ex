@@ -3,6 +3,8 @@ import {
     indexProduct,
     updateProductInES,
 } from './elasticsearchService.js';
+import ProductViewService from './ProductViewService.js';
+import ReviewService from './ReviewService.js';
 
 export const getProductsService = async ({ page = 1, limit = 10, category, search }) => {
     try {
@@ -50,7 +52,7 @@ export const getProductsService = async ({ page = 1, limit = 10, category, searc
     }
 };
 
-export const getProductByIdService = async (id) => {
+export const getProductByIdService = async (id, userId = null) => {
     try {
         const product = await Product.findById(id).lean();
         
@@ -61,15 +63,83 @@ export const getProductByIdService = async (id) => {
             };
         }
 
+        // Record view if user is authenticated
+        if (userId) {
+            await ProductViewService.recordView(id, userId);
+        }
+
+        // Get stats
+        const [viewStats, reviewData] = await Promise.all([
+            ProductViewService.getProductStats(id),
+            ReviewService.getReviewStats(id)
+        ]);
+
         return {
             EC: 0,
-            product
+            product,
+            stats: {
+                viewCount: viewStats.viewCount,
+                buyersCount: viewStats.buyersCount,
+                reviewCount: reviewData.totalReviews,
+                avgRating: reviewData.avgRating
+            }
         };
     } catch (error) {
         console.error('Error in getProductByIdService:', error);
         return {
             EC: 1,
             EM: 'Error fetching product'
+        };
+    }
+};
+
+// Get similar products based on category
+export const getSimilarProductsService = async (productId, limit = 8) => {
+    try {
+        const product = await Product.findById(productId);
+        if (!product) {
+            return {
+                EC: 1,
+                EM: 'Product not found',
+                products: []
+            };
+        }
+
+        // Get products in same category, excluding current product
+        const similarProducts = await Product.find({
+            _id: { $ne: productId },
+            category: product.category,
+            isActive: true
+        })
+        .limit(limit)
+        .lean();
+
+        // If not enough, get from other categories
+        if (similarProducts.length < limit) {
+            const moreProducts = await Product.find({
+                _id: { $ne: productId },
+                category: { $ne: product.category },
+                isActive: true
+            })
+            .limit(limit - similarProducts.length)
+            .lean();
+
+            return {
+                EC: 0,
+                products: [...similarProducts, ...moreProducts]
+            };
+        }
+
+        return {
+            EC: 0,
+            products: similarProducts
+        };
+    } catch (error) {
+        console.error('Error in getSimilarProductsService:', error);
+        return {
+            EC: 1,
+            EM: 'Error fetching similar products',
+            products: []
         };
     }
 };

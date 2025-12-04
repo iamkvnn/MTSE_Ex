@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { HomeOutlined, SettingOutlined, UserOutlined, ShoppingOutlined, DashboardOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { HomeOutlined, SettingOutlined, UserOutlined, ShoppingOutlined, DashboardOutlined, ShoppingCartOutlined, HeartOutlined, OrderedListOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/auth.context';
@@ -24,6 +24,16 @@ const Header = () => {
                 label: <Link to="/cart">Cart</Link>,
                 key: 'cart',
                 icon: <ShoppingCartOutlined />,
+            },
+            {
+                label: <Link to="/wishlist">Wishlist</Link>,
+                key: 'wishlist',
+                icon: <HeartOutlined />,
+            },
+            {
+                label: <Link to="/orders">Orders</Link>,
+                key: 'orders',
+                icon: <OrderedListOutlined />,
             }
         ] : []),
         ...(auth.isAuthenticated && auth.user.role === 'Admin' ? [
@@ -31,13 +41,21 @@ const Header = () => {
                 label: <Link to="/user">User</Link>,
                 key: 'user',
                 icon: <UserOutlined />,
-            }
-        ] : []),
-        ...(auth.isAuthenticated && auth.user.role === 'Admin' ? [
+            },
             {
-                label: <Link to="/admin">Admin Dashboard</Link>,
-                key: 'admin',
+                label: 'Admin',
+                key: 'admin-submenu',
                 icon: <DashboardOutlined />,
+                children: [
+                    {
+                        label: <Link to="/admin">Product Management</Link>,
+                        key: 'admin-products',
+                    },
+                    {
+                        label: <Link to="/admin/orders">Order Management</Link>,
+                        key: 'admin-orders',
+                    }
+                ]
             }
         ] : []),
         {

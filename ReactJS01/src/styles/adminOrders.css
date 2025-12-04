@@ -1,0 +1,160 @@
+.admin-orders-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.admin-orders-page h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 24px;
+}
+
+.stats-row {
+    margin-bottom: 24px;
+}
+
+.stats-row .ant-card {
+    height: 100%;
+}
+
+.filters-section {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.pagination-section {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+/* Update Status Modal */
+.update-status-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-field label {
+    font-weight: 500;
+}
+
+/* Order Detail Modal */
+.modal-loading {
+    text-align: center;
+    padding: 40px;
+}
+
+.order-detail-admin {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.detail-section {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-section:last-child {
+    border-bottom: none;
+}
+
+.detail-section h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.detail-section p {
+    margin: 4px 0;
+    color: #555;
+}
+
+.detail-section.cancelled {
+    background: #fff2f0;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #ffccc7;
+}
+
+.detail-section.cancelled h4 {
+    color: #ff4d4f;
+}
+
+.order-items-admin {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.order-item-admin {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #fafafa;
+    border-radius: 8px;
+}
+
+.order-item-admin img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.order-item-admin .item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.order-item-admin .item-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.order-item-admin .item-qty {
+    font-size: 13px;
+    color: #999;
+}
+
+.order-item-admin .item-total {
+    font-weight: 600;
+    color: #f5222d;
+}
+
+.detail-section.summary .summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+}
+
+.detail-section.summary .summary-row.total {
+    font-size: 18px;
+    font-weight: 600;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 12px;
+    margin-top: 8px;
+}
+
+.detail-section.summary .summary-row.total span:last-child {
+    color: #f5222d;
+}
